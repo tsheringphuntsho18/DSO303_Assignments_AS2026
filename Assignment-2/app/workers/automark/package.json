@@ -1,0 +1,8 @@
+{
+  "name": "eduexam-automark",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "pg": "^8.11.5"
+  }
+}

@@ -1,0 +1,25 @@
+# Terraform
+infra/.terraform/
+infra/.build/
+infra/*.tfstate
+infra/*.tfstate.*
+infra/terraform.tfvars
+infra/.terraform.lock.hcl
+infra/crash.log
+
+# Node
+node_modules/
+app/**/node_modules/
+npm-debug.log*
+
+# Rendered diagram artifacts (regenerate with generate_diagram.py)
+architecture/diagram.png
+architecture/diagram.svg
+architecture/puppeteer-config.json
+
+# Misc
+.DS_Store
+*.env
+.env
+__pycache__/
+*.pyc

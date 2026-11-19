@@ -1,0 +1,153 @@
+%% EduExam — full production architecture
+%% Render with: python3 architecture/generate_diagram.py
+flowchart TB
+
+    Student(["Student"])
+    Tutor(["Tutor"])
+    Admin(["Administrator"])
+
+    subgraph EDGE["Edge Layer"]
+        direction TB
+        R53["Route 53\nDNS + health checks"]
+        WAF["AWS WAF\nmanaged rules + rate limit"]
+        CF["CloudFront CDN\nHTTPS via ACM"]
+        R53 --> CF
+        WAF -.protects.-> CF
+    end
+
+    subgraph FRONTEND["Frontend"]
+        S3FE["S3: eduexam-frontend\nprivate, OAC"]
+    end
+
+    AUTH["Amazon Cognito\nUser Pool: student / tutor / admin groups\nJWT authorizer"]
+
+    subgraph APILAYER["API"]
+        APIGW["API Gateway (HTTP API)\nthrottled 1000 req/s"]
+    end
+
+    subgraph VPC["VPC 10.0.0.0/16"]
+        direction TB
+
+        subgraph AZA["Availability Zone A"]
+            direction TB
+            PUBA["Public subnet A\n10.0.0.0/24"]
+            PRIVA["Private subnet A\n10.0.10.0/24"]
+            NATA["NAT Gateway A"]
+            LAMBDA_A["Lambda ENIs\n(open-exam, autosave,\npresign-upload, workers)"]
+            AURORA_W["Aurora Serverless v2\nWRITER"]
+            PUBA --> NATA
+            PRIVA --- LAMBDA_A
+            PRIVA --- AURORA_W
+        end
+
+        subgraph AZB["Availability Zone B"]
+            direction TB
+            PUBB["Public subnet B\n10.0.1.0/24"]
+            PRIVB["Private subnet B\n10.0.11.0/24"]
+            NATB["NAT Gateway B"]
+            LAMBDA_B["Lambda ENIs\n(same functions,\nother AZ"]
+            AURORA_R["Aurora Serverless v2\nREADER (replica)"]
+            PUBB --> NATB
+            PRIVB --- LAMBDA_B
+            PRIVB --- AURORA_R
+        end
+
+        IGW["Internet Gateway"]
+        RDSPROXY["RDS Proxy\nconnection pooling"]
+        S3EP["S3 Gateway Endpoint"]
+
+        IGW --- PUBA
+        IGW --- PUBB
+        LAMBDA_A --> RDSPROXY
+        LAMBDA_B --> RDSPROXY
+        RDSPROXY --> AURORA_W
+        AURORA_W -. Multi-AZ sync .-> AURORA_R
+        LAMBDA_A -.-> S3EP
+        LAMBDA_B -.-> S3EP
+    end
+
+    subgraph STORAGE["File Storage"]
+        S3SUB["S3: eduexam-submissions\nPDF/ZIP <= 50MB\nversioned, SSE-KMS\nlifecycle: Std -> IA (90d)\n-> Glacier Deep Archive (365d)\n-> expire (1825d / 5yr)"]
+    end
+
+    subgraph ASYNC["Asynchronous Processing"]
+        direction TB
+        EB["EventBridge\nS3 ObjectCreated rule"]
+        SQSMARK["SQS: marking-queue"]
+        SQSMARKDLQ["DLQ: marking-dlq"]
+        SQSMAIL["SQS: email-queue"]
+        SQSMAILDLQ["DLQ: email-dlq"]
+        AUTOMARK["Lambda: automark\n(auto-mark MCQs)"]
+        NOTIFY["Lambda: notify-tutor"]
+        SENDMAIL["Lambda: send-email"]
+        SES["Amazon SES"]
+
+        SQSMARK --> AUTOMARK
+        SQSMARK -. after 5 failures .-> SQSMARKDLQ
+        EB --> NOTIFY
+        NOTIFY --> SQSMAIL
+        SQSMAIL --> SENDMAIL
+        SQSMAIL -. after 5 failures .-> SQSMAILDLQ
+        SENDMAIL --> SES
+    end
+
+    subgraph PLATFORM["Secrets, Monitoring & Audit"]
+        direction LR
+        SECRETS["Secrets Manager\nDB creds, auto-rotated"]
+        KMS["KMS\ncustomer-managed key"]
+        CW["CloudWatch\nlogs, alarms, dashboard"]
+        CT["CloudTrail\naudit log, 5yr retention"]
+    end
+
+    subgraph CICD["CI/CD"]
+        GH["GitHub Actions\n(OIDC, no static keys)"]
+        TF["Terraform apply\ninfra/"]
+        GH --> TF
+    end
+
+    Student --> R53
+    Tutor --> R53
+    Admin --> R53
+    CF -->|"/*  static"| S3FE
+    CF -->|"/api/*"| APIGW
+    APIGW --> AUTH
+    APIGW --> LAMBDA_A
+    APIGW --> LAMBDA_B
+    LAMBDA_A --> S3SUB
+    LAMBDA_B --> S3SUB
+    S3SUB --> EB
+    LAMBDA_A --> SQSMARK
+    LAMBDA_B --> SQSMARK
+    RDSPROXY -.reads secret.-> SECRETS
+    AUTOMARK --> RDSPROXY
+    NOTIFY --> RDSPROXY
+    S3SUB -. encrypted with .-> KMS
+    AURORA_W -. encrypted with .-> KMS
+    SECRETS -. encrypted with .-> KMS
+    LAMBDA_A -.logs/metrics.-> CW
+    LAMBDA_B -.logs/metrics.-> CW
+    APIGW -.access logs.-> CW
+    AURORA_W -.metrics.-> CW
+    SQSMARKDLQ -.alarm.-> CW
+    SQSMAILDLQ -.alarm.-> CW
+    APIGW -.calls audited.-> CT
+    TF -.deploys.-> VPC
+    TF -.deploys.-> APILAYER
+    TF -.deploys.-> FRONTEND
+    TF -.deploys.-> STORAGE
+    TF -.deploys.-> ASYNC
+    TF -.deploys.-> PLATFORM
+
+    classDef edge fill:#8C4FFF,color:#fff,stroke:#5a2fb0
+    classDef compute fill:#ED7100,color:#fff,stroke:#a85100
+    classDef data fill:#2E73B8,color:#fff,stroke:#1a4a7a
+    classDef storage fill:#1B660F,color:#fff,stroke:#0d3a07
+    classDef security fill:#DD344C,color:#fff,stroke:#8c1f30
+    classDef async fill:#C925D1,color:#fff,stroke:#7a1782
+
+    class R53,WAF,CF edge
+    class APIGW,LAMBDA_A,LAMBDA_B,AUTOMARK,NOTIFY,SENDMAIL compute
+    class AURORA_W,AURORA_R,RDSPROXY data
+    class S3FE,S3SUB storage
+    class AUTH,SECRETS,KMS,CT,WAF security
+    class EB,SQSMARK,SQSMAIL,SQSMARKDLQ,SQSMAILDLQ,SES async

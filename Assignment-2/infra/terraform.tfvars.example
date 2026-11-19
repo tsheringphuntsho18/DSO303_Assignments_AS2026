@@ -1,0 +1,17 @@
+# Copy to terraform.tfvars and fill in. terraform.tfvars is gitignored —
+# never commit real account/domain details to a public repo.
+
+aws_region          = "us-east-1"
+environment         = "dev"
+single_nat_gateway  = false # keep false to properly grade the AZ-failure scenario
+
+# Leave both blank to run entirely on the default CloudFront/API Gateway
+# URLs (no Route 53 hosted zone required):
+domain_name    = ""
+hosted_zone_id = ""
+
+alarm_email = ""
+
+# org/repo, used to scope the GitHub Actions OIDC trust policy. Leave blank
+# to skip creating the CI/CD IAM role (e.g. while building locally first).
+github_repo = ""

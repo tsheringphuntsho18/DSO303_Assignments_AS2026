@@ -1,0 +1,9 @@
+{
+  "name": "eduexam-presign-upload",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "@aws-sdk/s3-request-presigner": "^3.600.0",
+    "@aws-sdk/client-s3": "^3.600.0"
+  }
+}

@@ -1,0 +1,9 @@
+:root { color-scheme: light dark; }
+body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+section { border: 1px solid #8884; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
+label { display: block; margin: 0.5rem 0; }
+input, button { padding: 0.4rem; margin-top: 0.25rem; }
+button { cursor: pointer; }
+.error { color: #c0392b; }
+progress { width: 100%; }

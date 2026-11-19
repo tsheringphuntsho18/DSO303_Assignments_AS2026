@@ -1,0 +1,9 @@
+{
+  "name": "eduexam-submit-exam",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "pg": "^8.11.5",
+    "@aws-sdk/client-sqs": "^3.600.0"
+  }
+}
