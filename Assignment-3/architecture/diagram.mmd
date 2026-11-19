@@ -1,0 +1,181 @@
+%% EduExam — Assignment 3 revised, cost-optimized architecture
+%% Region: ap-southeast-1 (Singapore). Render with Mermaid Live / mmdc, or
+%% paste into the Cloud Architecture Lab simulator used for failure tests.
+%% Nodes/edges unchanged from Assignment 2 are left as-is; NEW components
+%% and CHANGED components are marked explicitly. SPOFs are marked with (!).
+flowchart TB
+
+    Student(["Student"])
+    Tutor(["Tutor"])
+    Admin(["Administrator"])
+    Bhutan["Bhutan-based users\n~2,400 km from SIN\n~55-75ms RTT"]
+
+    subgraph EDGE["Edge Layer — global, no region"]
+        direction TB
+        R53["Route 53\nDNS + health checks"]
+        WAF["AWS WAF\nmanaged rules + rate limit"]
+        CF["CloudFront CDN — CHANGED\nPrice Class 200 (was 100)\nBrotli/gzip compression on\nHTTPS via ACM (cert MUST be us-east-1\n— AWS requirement, not a region choice)"]
+        R53 --> CF
+        WAF -.protects.-> CF
+    end
+
+    subgraph FRONTEND["Frontend"]
+        S3FE["S3: eduexam-frontend\nprivate, OAC"]
+    end
+
+    AUTH["Amazon Cognito\nUser Pool, 8,400 MAU\n(under 10k free tier)"]
+
+    subgraph APILAYER["API — ap-southeast-1"]
+        APIGW["API Gateway (HTTP API)\nthrottled 1000 req/s burst 2000"]
+    end
+
+    subgraph VPC["VPC 10.0.0.0/16 — ap-southeast-1"]
+        direction TB
+
+        subgraph AZA["Availability Zone A (apse1-az1)"]
+            direction TB
+            PUBA["Public subnet A"]
+            PRIVA["Private subnet A"]
+            NATA["NAT Gateway A\nALWAYS ON (primary path)"]
+            LAMBDA_A["Lambda ENIs\n(open-exam, autosave,\npresign-upload, submit-exam, workers)"]
+            AURORA_W["Aurora Serverless v2\nWRITER — (!) SPOF for writes\nmitigated: auto-failover to\nreader in AZ-B, ~30-120s, inside 1h RTO"]
+            PUBA --> NATA
+            PRIVA --- LAMBDA_A
+            PRIVA --- AURORA_W
+        end
+
+        subgraph AZB["Availability Zone B (apse1-az2)"]
+            direction TB
+            PUBB["Public subnet B"]
+            PRIVB["Private subnet B"]
+            NATB["NAT Gateway B — CHANGED\n(!) ACCEPTED SPOF 10 normal months/yr:\nsingle_nat_gateway=true removes NAT-B;\nBOTH private subnets route via NAT-A,\nso an AZ-A outage drops NAT region-wide\nuntil NAT-B is recreated (Terraform, ~min).\nScaled back in for the 2 exam months\n(single_nat_gateway=false) when the\n1h RTO budget is tightest."]
+            LAMBDA_B["Lambda ENIs\n(same functions, other AZ)"]
+            AURORA_R["Aurora Serverless v2\nREADER (replica)\npromotion_tier=1"]
+            PUBB --> NATB
+            PRIVB --- LAMBDA_B
+            PRIVB --- AURORA_R
+        end
+
+        IGW["Internet Gateway"]
+        RDSPROXY["RDS Proxy\nconnection pooling, both AZs"]
+
+        subgraph ENDPOINTS["VPC Endpoints — CHANGED: 4 more added"]
+            direction LR
+            S3EP["S3 Gateway Endpoint\n(existing)"]
+            SECEP["Secrets Manager\nInterface Endpoint (existing)"]
+            SQSEP["SQS Interface\nEndpoint — NEW"]
+            COGEP["Cognito-idp Interface\nEndpoint — NEW"]
+            KMSEP["KMS Interface\nEndpoint — NEW"]
+            SESEP["SES (email-smtp)\nInterface Endpoint — NEW"]
+        end
+
+        IGW --- PUBA
+        IGW --- PUBB
+        LAMBDA_A --> RDSPROXY
+        LAMBDA_B --> RDSPROXY
+        RDSPROXY --> AURORA_W
+        AURORA_W -. Multi-AZ sync .-> AURORA_R
+        LAMBDA_A -.-> ENDPOINTS
+        LAMBDA_B -.-> ENDPOINTS
+    end
+
+    subgraph STORAGE["File Storage"]
+        S3SUB["S3: eduexam-submissions\nPDF/ZIP <= 50MB, versioned, SSE-KMS\nlifecycle: Std -> IA (90d)\n-> Glacier Deep Archive (365d)\n-> expire (1825d / 5yr)"]
+    end
+
+    subgraph ANSWERDATA["Answer Autosave Store — NEW"]
+        DDB["DynamoDB: exam-answers\nOn-Demand capacity, PITR on\nSSE with KMS\nTTL for scratch/draft rows"]
+    end
+
+    subgraph ASYNC["Asynchronous Processing"]
+        direction TB
+        EB["EventBridge\nS3 ObjectCreated rule"]
+        SQSMARK["SQS: marking-queue"]
+        SQSMARKDLQ["DLQ: marking-dlq"]
+        SQSMAIL["SQS: email-queue"]
+        SQSMAILDLQ["DLQ: email-dlq"]
+        AUTOMARK["Lambda: automark\n(auto-mark MCQs)"]
+        NOTIFY["Lambda: notify-tutor"]
+        SENDMAIL["Lambda: send-email"]
+        SES["Amazon SES"]
+
+        SQSMARK --> AUTOMARK
+        SQSMARK -. after 5 failures .-> SQSMARKDLQ
+        EB --> NOTIFY
+        NOTIFY --> SQSMAIL
+        SQSMAIL --> SENDMAIL
+        SQSMAIL -. after 5 failures .-> SQSMAILDLQ
+        SENDMAIL --> SES
+    end
+
+    subgraph PLATFORM["Secrets, Monitoring & Audit"]
+        direction LR
+        SECRETS["Secrets Manager\nDB creds, auto-rotated"]
+        KMS["KMS\ncustomer-managed key"]
+        CW["CloudWatch\nlogs, alarms, dashboard"]
+        CT["CloudTrail\naudit log, 5yr retention"]
+    end
+
+    subgraph CICD["CI/CD"]
+        GH["GitHub Actions\n(OIDC, no static keys)\n(!) ACCEPTED SPOF: pipeline/state loss\nmitigated: S3+DynamoDB remote TF\nstate backend recommended for prod"]
+        TF["Terraform apply\ninfra/ — aws_region=ap-southeast-1"]
+        GH --> TF
+    end
+
+    Student --> R53
+    Tutor --> R53
+    Admin --> R53
+    Bhutan -. higher latency than SIN-local .-> R53
+    CF -->|"/*  static"| S3FE
+    CF -->|"/api/*"| APIGW
+    APIGW --> AUTH
+    APIGW --> LAMBDA_A
+    APIGW --> LAMBDA_B
+    LAMBDA_A --> S3SUB
+    LAMBDA_B --> S3SUB
+    LAMBDA_A -->|"autosave writes — NEW path"| DDB
+    LAMBDA_B -->|"autosave writes — NEW path"| DDB
+    S3SUB --> EB
+    LAMBDA_A --> SQSMARK
+    LAMBDA_B --> SQSMARK
+    RDSPROXY -.reads secret.-> SECRETS
+    AUTOMARK --> RDSPROXY
+    AUTOMARK -.reads.-> DDB
+    NOTIFY --> RDSPROXY
+    S3SUB -. encrypted with .-> KMS
+    AURORA_W -. encrypted with .-> KMS
+    DDB -. encrypted with .-> KMS
+    SECRETS -. encrypted with .-> KMS
+    LAMBDA_A -.logs/metrics.-> CW
+    LAMBDA_B -.logs/metrics.-> CW
+    APIGW -.access logs.-> CW
+    AURORA_W -.metrics.-> CW
+    SQSMARKDLQ -.alarm.-> CW
+    SQSMAILDLQ -.alarm.-> CW
+    APIGW -.calls audited.-> CT
+    TF -.deploys.-> VPC
+    TF -.deploys.-> APILAYER
+    TF -.deploys.-> FRONTEND
+    TF -.deploys.-> STORAGE
+    TF -.deploys.-> ASYNC
+    TF -.deploys.-> ANSWERDATA
+    TF -.deploys.-> PLATFORM
+
+    classDef edge fill:#8C4FFF,color:#fff,stroke:#5a2fb0
+    classDef compute fill:#ED7100,color:#fff,stroke:#a85100
+    classDef data fill:#2E73B8,color:#fff,stroke:#1a4a7a
+    classDef storage fill:#1B660F,color:#fff,stroke:#0d3a07
+    classDef security fill:#DD344C,color:#fff,stroke:#8c1f30
+    classDef async fill:#C925D1,color:#fff,stroke:#7a1782
+    classDef new fill:#16A34A,color:#fff,stroke:#0a5c28,stroke-width:3px
+    classDef spof fill:#B91C1C,color:#fff,stroke:#7f1414,stroke-width:3px
+
+    class R53,WAF edge
+    class CF new
+    class APIGW,LAMBDA_A,LAMBDA_B,AUTOMARK,NOTIFY,SENDMAIL compute
+    class AURORA_R,RDSPROXY data
+    class S3FE,S3SUB storage
+    class AUTH,SECRETS,KMS,CT,WAF security
+    class EB,SQSMARK,SQSMAIL,SQSMARKDLQ,SQSMAILDLQ,SES async
+    class DDB,SQSEP,COGEP,KMSEP,SESEP new
+    class AURORA_W,NATB,GH spof

@@ -1,0 +1,2020 @@
+{
+  "format": "aws-architecture-lab",
+  "version": 2,
+  "exportedAt": "generated-by-generate_lab_import.py",
+  "state": {
+    "draftName": "EduExam Architecture \u2014 Assignment 3 (ap-southeast-1, cost-optimized)",
+    "nodes": [
+      {
+        "id": "eduexam-dns",
+        "type": "serviceNode",
+        "position": {
+          "x": 40,
+          "y": 40
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "route53",
+          "label": "Route 53",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-waf",
+        "type": "serviceNode",
+        "position": {
+          "x": 220,
+          "y": 40
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "waf",
+          "label": "AWS WAF",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-cdn",
+        "type": "serviceNode",
+        "position": {
+          "x": 400,
+          "y": 40
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "cloudfront",
+          "label": "CloudFront (Price Class 200)",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "notes": "CHANGED vs A2: Price Class 100 -> 200 for APAC edge coverage; compression on"
+        }
+      },
+      {
+        "id": "eduexam-cert",
+        "type": "serviceNode",
+        "position": {
+          "x": 580,
+          "y": 40
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "acm",
+          "label": "ACM Certificate (us-east-1 \u2014 AWS requirement)",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-auth",
+        "type": "serviceNode",
+        "position": {
+          "x": 760,
+          "y": 40
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "cognito",
+          "label": "Cognito",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-api",
+        "type": "serviceNode",
+        "position": {
+          "x": 940,
+          "y": 40
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "api_gateway",
+          "label": "API Gateway",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-frontend",
+        "type": "serviceNode",
+        "position": {
+          "x": 1120,
+          "y": 40
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "s3",
+          "label": "S3: eduexam-frontend",
+          "category": "Storage",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-vpc",
+        "type": "boundaryNode",
+        "position": {
+          "x": 40,
+          "y": 200
+        },
+        "style": {
+          "width": 1360,
+          "height": 820
+        },
+        "measured": {
+          "width": 1360,
+          "height": 820
+        },
+        "zIndex": -4,
+        "data": {
+          "label": "eduexam-vpc (ap-southeast-1)",
+          "boundaryType": "vpc",
+          "width": 1360,
+          "height": 820,
+          "cidr": "10.0.0.0/16"
+        }
+      },
+      {
+        "id": "public-subnet-a",
+        "type": "boundaryNode",
+        "position": {
+          "x": 80,
+          "y": 340
+        },
+        "style": {
+          "width": 560,
+          "height": 220
+        },
+        "measured": {
+          "width": 560,
+          "height": 220
+        },
+        "zIndex": -3,
+        "data": {
+          "label": "public-subnet-a \u00b7 AZ-A",
+          "boundaryType": "public_subnet",
+          "width": 560,
+          "height": 220,
+          "az": "AZ-A"
+        }
+      },
+      {
+        "id": "public-subnet-b",
+        "type": "boundaryNode",
+        "position": {
+          "x": 680,
+          "y": 340
+        },
+        "style": {
+          "width": 560,
+          "height": 220
+        },
+        "measured": {
+          "width": 560,
+          "height": 220
+        },
+        "zIndex": -3,
+        "data": {
+          "label": "public-subnet-b \u00b7 AZ-B",
+          "boundaryType": "public_subnet",
+          "width": 560,
+          "height": 220,
+          "az": "AZ-B"
+        }
+      },
+      {
+        "id": "private-subnet-a",
+        "type": "boundaryNode",
+        "position": {
+          "x": 80,
+          "y": 600
+        },
+        "style": {
+          "width": 560,
+          "height": 380
+        },
+        "measured": {
+          "width": 560,
+          "height": 380
+        },
+        "zIndex": -3,
+        "data": {
+          "label": "private-subnet-a \u00b7 AZ-A",
+          "boundaryType": "private_subnet",
+          "width": 560,
+          "height": 380,
+          "az": "AZ-A"
+        }
+      },
+      {
+        "id": "private-subnet-b",
+        "type": "boundaryNode",
+        "position": {
+          "x": 680,
+          "y": 600
+        },
+        "style": {
+          "width": 560,
+          "height": 380
+        },
+        "measured": {
+          "width": 560,
+          "height": 380
+        },
+        "zIndex": -3,
+        "data": {
+          "label": "private-subnet-b \u00b7 AZ-B",
+          "boundaryType": "private_subnet",
+          "width": 560,
+          "height": 380,
+          "az": "AZ-B"
+        }
+      },
+      {
+        "id": "eduexam-igw",
+        "type": "serviceNode",
+        "position": {
+          "x": 680,
+          "y": 210
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "internet_gateway",
+          "label": "Internet Gateway",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "nat-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 120,
+          "y": 380
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "nat_gateway",
+          "label": "NAT Gateway A \u2014 ALWAYS ON",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "public",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "nat-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 720,
+          "y": 380
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "nat_gateway",
+          "label": "NAT Gateway B \u2014 EXAM MONTHS ONLY (SPOF 10mo/yr)",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "public",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "notes": "CHANGED vs A2: removed in the 10 normal months (single_nat_gateway=true); restored for the 2 exam months. See architecture/CHANGE_LOG.md #4."
+        }
+      },
+      {
+        "id": "lambda-api-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 120,
+          "y": 640
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "lambda",
+          "label": "Lambda (API handlers, AZ-A)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-rds-proxy",
+        "type": "serviceNode",
+        "position": {
+          "x": 300,
+          "y": 640
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "rds_proxy",
+          "label": "RDS Proxy",
+          "category": "Databases",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "customConfig": {
+            "operationLab": {
+              "action": "Connect",
+              "resource": {
+                "engineFamily": "POSTGRESQL",
+                "port": 5432,
+                "status": "available",
+                "credentialsValid": true
+              },
+              "request": {},
+              "callerId": "lambda-api-a"
+            }
+          },
+          "iamRole": {
+            "id": "eduexam-rds-proxy-role",
+            "trustPolicy": {
+              "id": "eduexam-rds-proxy-role-trust",
+              "kind": "trust",
+              "statements": [
+                {
+                  "effect": "Allow",
+                  "actions": [
+                    "sts:AssumeRole"
+                  ],
+                  "resources": [],
+                  "principals": [
+                    "rds.amazonaws.com"
+                  ]
+                }
+              ]
+            },
+            "identityPolicies": [
+              {
+                "id": "eduexam-rds-proxy-role-permissions",
+                "kind": "identity",
+                "statements": [
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "secretsmanager:GetSecretValue"
+                    ],
+                    "resources": [
+                      "arn:aws:secretsmanager:ap-southeast-1:000000000000:secret:eduexam-secrets"
+                    ]
+                  },
+                  {
+                    "effect": "Allow",
+                    "actions": [
+                      "kms:Decrypt"
+                    ],
+                    "resources": [
+                      "arn:aws:kms:ap-southeast-1:000000000000:key:eduexam-kms"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": "aurora-writer",
+        "type": "serviceNode",
+        "position": {
+          "x": 480,
+          "y": 640
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "aurora_serverless",
+          "label": "Aurora Serverless v2 (writer)",
+          "category": "Databases",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": true,
+          "width": 140,
+          "height": 99,
+          "customConfig": {
+            "operationLab": {
+              "action": "Connect",
+              "resource": {
+                "engine": "aurora-postgresql",
+                "port": 5432,
+                "status": "available",
+                "minCapacityAcu": 0.5,
+                "paused": false,
+                "credentialsValid": true
+              },
+              "request": {},
+              "callerId": "eduexam-rds-proxy"
+            }
+          }
+        }
+      },
+      {
+        "id": "lambda-api-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 720,
+          "y": 640
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "lambda",
+          "label": "Lambda (API handlers, AZ-B)",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "aurora-reader",
+        "type": "serviceNode",
+        "position": {
+          "x": 900,
+          "y": 640
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "aurora_serverless",
+          "label": "Aurora Serverless v2 (reader)",
+          "category": "Databases",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": true,
+          "width": 140,
+          "height": 99,
+          "customConfig": {
+            "operationLab": {
+              "action": "Connect",
+              "resource": {
+                "engine": "aurora-postgresql",
+                "port": 5432,
+                "status": "available",
+                "minCapacityAcu": 0.5,
+                "paused": false,
+                "credentialsValid": true
+              },
+              "request": {},
+              "callerId": "aurora-writer"
+            }
+          }
+        }
+      },
+      {
+        "id": "s3-endpoint",
+        "type": "serviceNode",
+        "position": {
+          "x": 120,
+          "y": 760
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "s3_gateway_endpoint",
+          "label": "S3 Gateway Endpoint",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "secrets-endpoint",
+        "type": "serviceNode",
+        "position": {
+          "x": 300,
+          "y": 760
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "vpc_endpoint_interface",
+          "label": "Secrets Manager Interface Endpoint",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "sqs-endpoint",
+        "type": "serviceNode",
+        "position": {
+          "x": 480,
+          "y": 760
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "vpc_endpoint_interface",
+          "label": "SQS Interface Endpoint \u2014 NEW",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "cognito-endpoint",
+        "type": "serviceNode",
+        "position": {
+          "x": 120,
+          "y": 860
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "vpc_endpoint_interface",
+          "label": "Cognito IDP Interface Endpoint \u2014 NEW",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "kms-endpoint",
+        "type": "serviceNode",
+        "position": {
+          "x": 300,
+          "y": 860
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "vpc_endpoint_interface",
+          "label": "KMS Interface Endpoint \u2014 NEW",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "ses-endpoint",
+        "type": "serviceNode",
+        "position": {
+          "x": 480,
+          "y": 860
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "vpc_endpoint_interface",
+          "label": "SES Interface Endpoint \u2014 NEW",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "private",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-submissions",
+        "type": "serviceNode",
+        "position": {
+          "x": 1480,
+          "y": 200
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "s3",
+          "label": "S3: eduexam-submissions",
+          "category": "Storage",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-answers",
+        "type": "serviceNode",
+        "position": {
+          "x": 1480,
+          "y": 310
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "dynamodb",
+          "label": "DynamoDB: exam-answers \u2014 NEW (On-Demand, PITR)",
+          "category": "Databases",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "notes": "NEW in Assignment 3 (CHANGE_LOG #6): autosave writes move here from Aurora. On-Demand capacity \u2014 no ACU-style ceiling during the exam-start burst.",
+          "customConfig": {
+            "operationLab": {
+              "action": "dynamodb:PutItem",
+              "resource": {
+                "TableName": "exam-answers",
+                "status": "ACTIVE"
+              },
+              "request": {
+                "TableName": "exam-answers",
+                "Item": {
+                  "attemptId": {
+                    "S": "synthetic"
+                  },
+                  "questionId": {
+                    "S": "synthetic"
+                  }
+                }
+              },
+              "callerId": "lambda-api-a"
+            }
+          }
+        }
+      },
+      {
+        "id": "eduexam-events",
+        "type": "serviceNode",
+        "position": {
+          "x": 1480,
+          "y": 420
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "eventbridge",
+          "label": "EventBridge",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "customConfig": {
+            "operationLab": {
+              "action": "events:PutEvents",
+              "resource": {
+                "exists": true
+              },
+              "request": {
+                "Entries": [
+                  {
+                    "Source": "eduexam.submissions",
+                    "DetailType": "Object Created",
+                    "Detail": "{\"bucket\":\"eduexam-submissions\"}"
+                  }
+                ]
+              },
+              "callerId": "eduexam-submissions"
+            }
+          }
+        }
+      },
+      {
+        "id": "marking-queue",
+        "type": "serviceNode",
+        "position": {
+          "x": 1480,
+          "y": 530
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "sqs",
+          "label": "SQS: marking-queue",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "marking-dlq",
+        "type": "serviceNode",
+        "position": {
+          "x": 1680,
+          "y": 530
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "sqs_dlq",
+          "label": "DLQ: marking-dlq",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "email-queue",
+        "type": "serviceNode",
+        "position": {
+          "x": 1480,
+          "y": 640
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "sqs",
+          "label": "SQS: email-queue",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "email-dlq",
+        "type": "serviceNode",
+        "position": {
+          "x": 1680,
+          "y": 640
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "sqs_dlq",
+          "label": "DLQ: email-dlq",
+          "category": "Integration & Messaging",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "lambda-automark",
+        "type": "serviceNode",
+        "position": {
+          "x": 1480,
+          "y": 750
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "lambda",
+          "label": "Lambda: automark",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "lambda-notify-tutor",
+        "type": "serviceNode",
+        "position": {
+          "x": 1680,
+          "y": 750
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "lambda",
+          "label": "Lambda: notify-tutor",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "lambda-send-email",
+        "type": "serviceNode",
+        "position": {
+          "x": 1480,
+          "y": 860
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "lambda",
+          "label": "Lambda: send-email",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-ses",
+        "type": "serviceNode",
+        "position": {
+          "x": 1680,
+          "y": 860
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "ses",
+          "label": "Amazon SES",
+          "category": "Business Applications",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-secrets",
+        "type": "serviceNode",
+        "position": {
+          "x": 40,
+          "y": 1100
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "secrets_manager",
+          "label": "Secrets Manager",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "customConfig": {
+            "operationLab": {
+              "action": "secretsmanager:GetSecretValue",
+              "resource": {
+                "SecretId": "eduexam-db-credentials",
+                "versions": [
+                  {
+                    "VersionId": "00000000000000000000000000000001",
+                    "VersionStages": [
+                      "AWSCURRENT"
+                    ],
+                    "SecretString": "synthetic-training-value"
+                  }
+                ]
+              },
+              "request": {},
+              "callerId": "eduexam-rds-proxy"
+            }
+          }
+        }
+      },
+      {
+        "id": "eduexam-kms",
+        "type": "serviceNode",
+        "position": {
+          "x": 220,
+          "y": 1100
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "kms",
+          "label": "AWS KMS",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "customConfig": {
+            "operationLab": {
+              "action": "kms:DescribeKey",
+              "resource": {
+                "KeyId": "eduexam-key",
+                "KeyState": "Enabled",
+                "KeyUsage": "ENCRYPT_DECRYPT"
+              },
+              "request": {},
+              "callerId": "eduexam-secrets"
+            }
+          }
+        }
+      },
+      {
+        "id": "eduexam-monitoring",
+        "type": "serviceNode",
+        "position": {
+          "x": 400,
+          "y": 1100
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "cloudwatch",
+          "label": "CloudWatch",
+          "category": "Management & Governance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99,
+          "customConfig": {
+            "operationLab": {
+              "action": "cloudwatch:PutMetricData",
+              "resource": {},
+              "request": {
+                "Namespace": "EduExam/Api",
+                "MetricData": [
+                  {
+                    "MetricName": "Requests",
+                    "Value": 1
+                  }
+                ]
+              },
+              "callerId": "eduexam-api"
+            }
+          }
+        }
+      },
+      {
+        "id": "eduexam-audit",
+        "type": "serviceNode",
+        "position": {
+          "x": 580,
+          "y": 1100
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "cloudtrail",
+          "label": "CloudTrail",
+          "category": "Management & Governance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "eduexam-iam",
+        "type": "serviceNode",
+        "position": {
+          "x": 760,
+          "y": 1100
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "zIndex": 10,
+        "data": {
+          "serviceId": "iam",
+          "label": "AWS IAM",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Edge / Global",
+          "subnet": "global",
+          "replicas": 1,
+          "multiAz": false,
+          "width": 140,
+          "height": 99
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "eduexam-dns__eduexam-cdn",
+        "source": "eduexam-dns",
+        "target": "eduexam-cdn",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS"
+        }
+      },
+      {
+        "id": "eduexam-waf__eduexam-cdn",
+        "source": "eduexam-waf",
+        "target": "eduexam-cdn",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-cert__eduexam-cdn",
+        "source": "eduexam-cert",
+        "target": "eduexam-cdn",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "TLS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-cdn__eduexam-frontend",
+        "source": "eduexam-cdn",
+        "target": "eduexam-frontend",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS"
+        }
+      },
+      {
+        "id": "eduexam-cdn__eduexam-api",
+        "source": "eduexam-cdn",
+        "target": "eduexam-api",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS"
+        }
+      },
+      {
+        "id": "eduexam-api__eduexam-auth",
+        "source": "eduexam-api",
+        "target": "eduexam-auth",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-api__lambda-api-a",
+        "source": "eduexam-api",
+        "target": "lambda-api-a",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS"
+        }
+      },
+      {
+        "id": "eduexam-api__lambda-api-b",
+        "source": "eduexam-api",
+        "target": "lambda-api-b",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS"
+        }
+      },
+      {
+        "id": "lambda-api-a__eduexam-rds-proxy",
+        "source": "lambda-api-a",
+        "target": "eduexam-rds-proxy",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "SQL"
+        }
+      },
+      {
+        "id": "lambda-api-b__eduexam-rds-proxy",
+        "source": "lambda-api-b",
+        "target": "eduexam-rds-proxy",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "SQL"
+        }
+      },
+      {
+        "id": "eduexam-rds-proxy__aurora-writer",
+        "source": "eduexam-rds-proxy",
+        "target": "aurora-writer",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false
+        }
+      },
+      {
+        "id": "eduexam-rds-proxy__aurora-reader",
+        "source": "eduexam-rds-proxy",
+        "target": "aurora-reader",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false
+        }
+      },
+      {
+        "id": "aurora-writer__aurora-reader",
+        "source": "aurora-writer",
+        "target": "aurora-reader",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Replication",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-a__eduexam-submissions",
+        "source": "lambda-api-a",
+        "target": "eduexam-submissions",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS"
+        }
+      },
+      {
+        "id": "lambda-api-b__eduexam-submissions",
+        "source": "lambda-api-b",
+        "target": "eduexam-submissions",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS"
+        }
+      },
+      {
+        "id": "lambda-api-a__eduexam-answers",
+        "source": "lambda-api-a",
+        "target": "eduexam-answers",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-b__eduexam-answers",
+        "source": "lambda-api-b",
+        "target": "eduexam-answers",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-automark__eduexam-answers",
+        "source": "lambda-automark",
+        "target": "eduexam-answers",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-submissions__eduexam-events",
+        "source": "eduexam-submissions",
+        "target": "eduexam-events",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Event",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-events__lambda-notify-tutor",
+        "source": "eduexam-events",
+        "target": "lambda-notify-tutor",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Event",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-notify-tutor__email-queue",
+        "source": "lambda-notify-tutor",
+        "target": "email-queue",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Message",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "email-queue__lambda-send-email",
+        "source": "email-queue",
+        "target": "lambda-send-email",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Message",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "email-queue__email-dlq",
+        "source": "email-queue",
+        "target": "email-dlq",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Message",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-send-email__eduexam-ses",
+        "source": "lambda-send-email",
+        "target": "eduexam-ses",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-a__marking-queue",
+        "source": "lambda-api-a",
+        "target": "marking-queue",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Message",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "marking-queue__lambda-automark",
+        "source": "marking-queue",
+        "target": "lambda-automark",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": true,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Message",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "marking-queue__marking-dlq",
+        "source": "marking-queue",
+        "target": "marking-dlq",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "Message",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-a__eduexam-secrets",
+        "source": "lambda-api-a",
+        "target": "eduexam-secrets",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-b__eduexam-secrets",
+        "source": "lambda-api-b",
+        "target": "eduexam-secrets",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-rds-proxy__eduexam-secrets",
+        "source": "eduexam-rds-proxy",
+        "target": "eduexam-secrets",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "HTTPS",
+          "relationship": "manages"
+        }
+      },
+      {
+        "id": "eduexam-submissions__eduexam-kms",
+        "source": "eduexam-submissions",
+        "target": "eduexam-kms",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "aurora-writer__eduexam-kms",
+        "source": "aurora-writer",
+        "target": "eduexam-kms",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-answers__eduexam-kms",
+        "source": "eduexam-answers",
+        "target": "eduexam-kms",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-secrets__eduexam-kms",
+        "source": "eduexam-secrets",
+        "target": "eduexam-kms",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "nat-a__eduexam-igw",
+        "source": "nat-a",
+        "target": "eduexam-igw",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "nat-b__eduexam-igw",
+        "source": "nat-b",
+        "target": "eduexam-igw",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "eduexam-api__eduexam-audit",
+        "source": "eduexam-api",
+        "target": "eduexam-audit",
+        "type": "custom",
+        "data": {
+          "interactionType": "asynchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-a__sqs-endpoint",
+        "source": "lambda-api-a",
+        "target": "sqs-endpoint",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-a__cognito-endpoint",
+        "source": "lambda-api-a",
+        "target": "cognito-endpoint",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-a__kms-endpoint",
+        "source": "lambda-api-a",
+        "target": "kms-endpoint",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-send-email__ses-endpoint",
+        "source": "lambda-send-email",
+        "target": "ses-endpoint",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      },
+      {
+        "id": "lambda-api-b__secrets-endpoint",
+        "source": "lambda-api-b",
+        "target": "secrets-endpoint",
+        "type": "custom",
+        "data": {
+          "interactionType": "synchronous",
+          "isCriticalDependency": false,
+          "timeoutMs": 1500,
+          "isSimulating": false,
+          "isFailing": false,
+          "protocol": "All",
+          "traversal": "dependency"
+        }
+      }
+    ],
+    "scenario": {
+      "id": "eduexam-walkthrough-1",
+      "name": "Student opens an exam",
+      "method": "GET",
+      "path": "/api/exams/{examId}/start",
+      "startNodeId": "eduexam-dns",
+      "trafficLevel": "normal"
+    },
+    "simulationResult": null,
+    "activeFailures": [],
+    "activeLabReference": null,
+    "activeChallengeId": null,
+    "challengeResult": null,
+    "appMode": "design",
+    "selectedNodeId": null,
+    "selectedEdgeId": null,
+    "playbackSpeed": 1,
+    "highlightTaskFlow": false,
+    "showNaclSideColumn": false,
+    "activeStepIndex": null,
+    "viewport": null
+  }
+}
